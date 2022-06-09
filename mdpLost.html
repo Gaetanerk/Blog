@@ -12,37 +12,30 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <title>Inscription</title>
+    <title>Mot de passe oublié</title>
   </head>
   <body id="main">
-    <div id="back-main">
-      <a href="./index.html"><i class="fa-solid fa-arrow-left-long"></i></a>
+    <div id="navBlog">
+      <a href="./blog.html"><i class="fa-solid fa-house"></i></a>
     </div>
-    <div id="new-user">
-      <form action="./blog.html">
+    <div id="mdpLost">
+      <form>
         <h4>Nom d'utilisateur :</h4>
         <input
           class="userInput inputForm"
           type="text"
-          placeholder="Nom d'utilisateur"
+          placeholder="Nom d'utlisateur"
         />
         <h4>Email :</h4>
         <input
-          class="emailInput inputForm"
+          class="contactEmailInput inputForm"
           type="email"
           placeholder="email@email.com"
         />
-        <h4>Mot de passe :</h4>
-        <input
-          class="passwordInput inputForm"
-          type="password"
-          placeholder="Mot de passe"
-        />
         <br />
-        <button id="btnSubmitNewUser" class="btn-submit">Valider</button>
+        <button id="btnSubmitContact" class="btn-submit">Valider</button>
       </form>
     </div>
-    <div id="errorMessage"></div>
   </body>
-  <script src="./assets/js/scriptNewUser.js"></script>
+  <script src="./assets/js/scriptContact.js"></script>
 </html>
