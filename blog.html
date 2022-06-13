@@ -26,25 +26,30 @@
     </div>
     <div id="lignGreen"></div>
     <div id="addArticle">
-      <a class="addLink" href="./add.html"
-        ><i class="fa-solid fa-plus"></i> Ajouter un article</a
-      >
+      <button class="addLink" type="submit">
+        <i class="fa-solid fa-plus"></i> Ajouter un article
+      </button>
     </div>
     <div id="lignGreen"></div>
-    <div id="articles">
-      <ul class="liBlog">
-        <li>
-          <img
-            class="articlesPicture"
-            src="./images/caraibes.jpg"
-            alt="caraibes"
-          />
-          <h6>Destination Caraïbes</h6>
-          <a href="./1.html">Voir l'article</a>
-          <p>Posté par user1 le 01/01/01</p>
-        </li>
-      </ul>
+    <div id="addPost">
+      <form id="addNew" action="./blog.html">
+        <h4>Titre de votre article :</h4>
+        <input class="addTitle" type="text" />
+        <h4>Catégorie :</h4>
+        <input class="addCat" type="text" />
+        <h4>Choisir une photo :</h4>
+        <input class="addPict" type="file" accept="image/jpeg" />
+        <br />
+        <h4>Décrire votre voyage :</h4>
+        <textarea class="addDesc" cols="100" rows="20"></textarea>
+        <br />
+        <button class="submitAddNewArticle" type="submit">Valider</button>
+        <button class="cancelAddNewArticle" type="submit">Annuler</button>
+      </form>
+    </div>
+    <div id="new-articles">
+      <ul class="ulBlog"></ul>
     </div>
   </body>
-  <script src="./assets/js/scriptAdd.js"></script>
+  <script src="./assets/js/scriptNewArticle.js"></script>
 </html>

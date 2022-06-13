@@ -2,7 +2,7 @@ const submitUser = document.querySelector("#btnSubmitUser");
 
 document.querySelector(".userInput").focus();
 
-submitUser.onclick = function validFormUser() {
+submitUser.onclick = function () {
   const name = document.querySelector(".userInput");
   const password = document.querySelector(".passwordInput");
 
