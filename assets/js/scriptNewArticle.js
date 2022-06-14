@@ -1,7 +1,7 @@
 const btnAddBlog = document.querySelector(".addLink");
 const cancelAddBlog = document.querySelector(".cancelAddNewArticle");
-addPost.style.display = "none";
 const submitAddNewArticle = document.querySelector(".submitAddNewArticle");
+addPost.style.display = "none";
 
 function addTask() {
   const newUlBlog = document.querySelector("ul");
@@ -35,8 +35,21 @@ function addTask() {
   const newPBlog = document.createElement("p");
   newLiBlog.appendChild(newPBlog);
   newPBlog.className = "newAaddDesc";
-  const descInput = document.querySelector(".addDesc").value;
-  newPBlog.textContent = descInput;
+
+  const btnEditBlog = document.createElement("button");
+  const editBtn = document.createTextNode("Modifier");
+  newLiBlog.appendChild(btnEditBlog);
+  btnEditBlog.appendChild(editBtn);
+  btnEditBlog.className = "newEditBtn";
+
+  const btnDeleteBlog = document.createElement("button");
+  const deleteBtn = document.createTextNode("Supprimer");
+  newLiBlog.appendChild(btnDeleteBlog);
+  btnDeleteBlog.appendChild(deleteBtn);
+  btnDeleteBlog.className = "newDeleteBtn";
+  btnDeleteBlog.addEventListener("click", () => {
+    btnDeleteBlog.parentElement.remove();
+  });
 
   newUlBlog.appendChild(newLiBlog);
 
@@ -46,6 +59,12 @@ function addTask() {
   document.querySelector(".addDesc").value = "";
 }
 
+btnAddBlog.addEventListener("click", () => {
+  const addPost = document.querySelector("#addPost");
+  addPost.style.display = "block";
+  document.querySelector(".addTitle").focus();
+});
+
 submitAddNewArticle.addEventListener("click", (e) => {
   e.preventDefault();
   addTask();
@@ -53,13 +72,8 @@ submitAddNewArticle.addEventListener("click", (e) => {
   addPost.style.display = "none";
 });
 
-btnAddBlog.addEventListener("click", () => {
-  const addPost = document.querySelector("#addPost");
-  addPost.style.display = "block";
-  document.querySelector(".addTitle").focus();
-});
-
-cancelAddBlog.addEventListener("click", () => {
+cancelAddBlog.addEventListener("click", (e) => {
+  e.preventDefault();
   const addPost = document.querySelector("#addPost");
   addPost.style.display = "none";
 });
