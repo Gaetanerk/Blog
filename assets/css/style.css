@@ -165,6 +165,7 @@ h4 {
   position: fixed;
   margin: 1em;
   right: 2em;
+  top: -0.2em;
 }
 
 #errorMessage {

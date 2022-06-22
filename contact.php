@@ -16,10 +16,10 @@
   </head>
   <body>
     <div id="navBlog">
-      <a href="./blog.html"><i class="fa-solid fa-house"></i></a>
+      <a href=""><i class="fa-solid fa-house"></i></a>
     </div>
     <div id="contact">
-      <form action="./contact.html">
+      <form action="" method="post">
         <h4>Email :</h4>
         <input
           class="contactEmailInput inputForm"
