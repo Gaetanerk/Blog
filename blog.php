@@ -54,13 +54,12 @@
       $picture = $_POST['picture'] ?? false;
       $desc = $_POST['desc'] ?? false;
       $desc = htmlspecialchars($desc);
-      $dateCreation = new DateTime($article['dateCreation']);
 
       if (strlen($title) > 0 && strlen($category) > 0 && strlen($desc) > 0) {
 
         require_once 'cnxBdd.php';
 
-        $req = $pdo->prepare('insert into article values (null, :title, :category, :picture, :desc, NOW() )');
+        $req = $pdo->prepare('insert into article values (null, :title, :category, :picture, :desc )');
         if ($req->execute([
           ':title' => $title,
           ':category' => $category,
@@ -74,7 +73,6 @@
           <p class="newCatBlog">{$article["category"]}</p>
           <button class="newAddBtn">Voir les détails</button>
           <p class="newAaddDesc">{$article["description"]}</p>
-          <p>{$dateCreation->format("d/m/Y H:i:s")}</p>
           <p>
             <form action="updateArticle.php" method="post" >
               <input type="hidden" name="id" value="{$article["id"]}">
@@ -100,6 +98,6 @@
     </ul>
   </div>
 </body>
-<script src="./assets/js/scriptNewArticle.js"></script>
+<!-- <script src="./assets/js/scriptNewArticle.js"></script> -->
 
 </html>
