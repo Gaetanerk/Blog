@@ -40,7 +40,7 @@ if(isset($_SESSION['user'])){
       $title = htmlspecialchars($title);
       $category = $_POST['category'] ?? false;
       $category = htmlspecialchars($category);
-      $picture = $_POST['picture'] ?? false;
+      $picture = "pict".date("dmYHis")."."."jpg" ?? false;
       $desc = $_POST['desc'] ?? false;
       $desc = htmlspecialchars($desc);
 
@@ -92,11 +92,32 @@ require_once 'cnxBdd.php';
 $stmt = $pdo->query("select * from article");
 $result = $stmt->fetchAll();
 
+$nomOrigine = $_FILES['picture']['name'];
+$elementsChemin = pathinfo($nomOrigine);
+$extensionFichier = $elementsChemin['extension'];
+$extensionsAutorisees = array("jpg");
+if (!(in_array($extensionFichier, $extensionsAutorisees))) {
+    echo "Le fichier n'a pas l'extension attendue";
+} else {
+    $repertoireDestination = dirname(__FILE__)."/images/";
+    $nomDestination = "pict".date("dmYHis").".".$extensionFichier;
+
+    if (move_uploaded_file($_FILES["picture"]["tmp_name"],
+        $repertoireDestination.$nomDestination)) {
+        echo "Le fichier temporaire ".$_FILES["picture"]["tmp_name"].
+            " a été déplacé vers ".$repertoireDestination.$nomDestination;
+    } else {
+        echo "Le fichier n'a pas été uploadé (trop gros ?) ou ".
+            "Le déplacement du fichier temporaire a échoué".
+            " vérifiez l'existence du répertoire ".$repertoireDestination;
+    }
+}
+
 foreach ($result as $key => $article) {
     $dateCreation = new DateTime($article['dateCreation']);
     echo"
           <li>
-          <img class='newAddPict'>{$article['picture']}</img>
+          <img class='newAddPict' src='./images/{$article['picture']}'></img>
           <h6 class='newAddTitle'>{$article['title']}</h6>
           <p class='newCatBlog'>{$article['category']}</p>
           <button class='newAddBtn'>Voir les détails</button>
