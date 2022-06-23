@@ -1,3 +1,10 @@
+<?php
+session_start();
+if(isset($_SESSION['user'])){
+    var_dump($_SESSION);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -28,24 +35,6 @@
   </div>
   <div id="lignGreen"></div>
   <div id="addPost">
-    <form id="addNew" action="" method="POST">
-      <h4>Titre de votre article :</h4>
-      <input class="addTitle" type="text" name="title" />
-      <h4>Catégorie :</h4>
-      <input class="addCat" type="text" name="category" />
-      <h4>Choisir une photo :</h4>
-      <input class="addPict" type="file" name="picture" accept="image/jpeg" />
-      <br />
-      <h4>Décrire votre voyage :</h4>
-      <textarea class="addDesc" cols="100" rows="20" name="desc"></textarea>
-      <br />
-      <button class="submitAddNewArticle" type="submit">Valider</button>
-      <button class="cancelAddNewArticle" type="submit">Annuler</button>
-    </form>
-  </div>
-  <div id="new-articles">
-    <ul class="ulBlog">
-
       <?php
       $title = $_POST['title'] ?? false;
       $title = htmlspecialchars($title);
@@ -57,47 +46,77 @@
 
       if (strlen($title) > 0 && strlen($category) > 0 && strlen($desc) > 0) {
 
-        require_once 'cnxBdd.php';
+          try {
+              require_once 'cnxBdd.php';
 
-        $req = $pdo->prepare('insert into article values (null, :title, :category, :picture, :desc )');
-        if ($req->execute([
-          ':title' => $title,
-          ':category' => $category,
-          ':picture' => $picture,
-          ':desc' => $desc
-        ])) {
-          echo '
+              $req = $pdo->prepare('insert into article values (null, :title, :category, :picture, :desc, NOW())');
+              $req->execute([
+                  ':title' => $title,
+                  ':category' => $category,
+                  ':picture' => $picture,
+                  ':desc' => $desc
+              ]);
+              }
+          catch
+              (PDOException | DomainException $Exception) {
+                  echo '
+            <div>
+              <strong>Erreur!<br>' . $Exception->getMessage() . '</strong>
+            </div>
+            ';
+              }
+        };
+      ?>
+    <form id='addNew' action='' method='POST' enctype='multipart/form-data'>
+      <h4>Titre de votre article :</h4>
+      <input class='addTitle' type='text' name='title' />
+      <h4>Catégorie :</h4>
+      <input class='addCat' type='text' name='category' />
+      <h4>Choisir une photo :</h4>
+      <input type="hidden" name="MAX_FILE_SIZE" value="600000" />
+      <input class='addPict' type='file' name='picture' accept='image/jpeg' />
+      <br />
+      <h4>Décrire votre voyage :</h4>
+      <textarea class='addDesc' cols='60' rows='10' name='desc'></textarea>
+      <br />
+      <button class='submitAddNewArticle' type='submit'>Valider</button>
+    </form>
+  </div>
+
+  <div id='new-articles'>
+    <ul class='ulBlog'>
+
+<?php
+require_once 'cnxBdd.php';
+
+$stmt = $pdo->query("select * from article");
+$result = $stmt->fetchAll();
+
+foreach ($result as $key => $article) {
+    $dateCreation = new DateTime($article['dateCreation']);
+    echo"
           <li>
-          <img class="newAddPict">{$article["picture"]}</img>
-          <h6 class="newAddTitle">{$article["title"]}</h6>
-          <p class="newCatBlog">{$article["category"]}</p>
-          <button class="newAddBtn">Voir les détails</button>
-          <p class="newAaddDesc">{$article["description"]}</p>
+          <img class='newAddPict'>{$article['picture']}</img>
+          <h6 class='newAddTitle'>{$article['title']}</h6>
+          <p class='newCatBlog'>{$article['category']}</p>
+          <button class='newAddBtn'>Voir les détails</button>
+          <p>Posté le {$dateCreation->format('d/m/Y H:i:s')}</p>
           <p>
-            <form action="updateArticle.php" method="post" >
-              <input type="hidden" name="id" value="{$article["id"]}">
-              <button type="submit" >Modifier</button>
+            <form action='updateArticle.php' method='POST' >
+              <input type='hidden' name='id' value='{$article['id']}'>
+              <button type='submit' >Modifier</button>
             </form>
-            <form action="deleteArticle.php" method="post" >
-              <input type="hidden" name="id" value="{$article["id"]}">
-              <button type="submit" >Supprimer</button>
-            </form>
+            <form action='deleteArticle.php' method='POST' >
+              <input type='hidden' name='id' value='{$article['id']}'>
+              <button type='submit' >Supprimer</button>
           </p>
-          </li>';
-        } else {
-          echo '
-          <div class="alert alert-dismissible alert-danger">
-          <button type="button" data-bs-dismiss="alert"></button>
-          <strong>Erreur!</strong> <a href="#" >Une erreur est survenue lors de la création de l\'article
-          </a> and try submitting again.
-          </div>
-          ';
-        }
-      }
+            </form>
+          </li>
+          ";}
       ?>
     </ul>
   </div>
 </body>
-<!-- <script src="./assets/js/scriptNewArticle.js"></script> -->
+<script src="./assets/js/scriptNewArticle.js"></script>
 
 </html>

@@ -1,26 +1,19 @@
 const btnAddBlog = document.querySelector(".addLink");
-const cancelAddBlog = document.querySelector(".cancelAddNewArticle");
-const submitAddNewArticle = document.querySelector(".submitAddNewArticle");
-addPost.style.display = "none";
+document.querySelector("#addPost").style.display = "none";
+
+let nbClic=0;
+function compteClic() {
+  nbClic++;
+}
 
 btnAddBlog.addEventListener("click", () => {
-  const addPost = document.querySelector("#addPost");
-  addPost.style.display = "block";
-  document.querySelector(".addTitle").focus();
+  compteClic();
+  if (nbClic %2) {
+    document.querySelector("#addPost").style.display = "block";
+    document.querySelector(".addTitle").focus();
+  } else {
+    document.querySelector("#addPost").style.display = "none";
+    document.querySelector("#addPost").style.display = "none";
+  }
 });
 
-submitAddNewArticle.addEventListener("click", (e) => {
-  e.preventDefault();
-  document.querySelector(".addTitle").value = "";
-  document.querySelector(".addCat").value = "";
-  document.querySelector(".addPict").value = "";
-  document.querySelector(".addDesc").value = "";
-  const addPost = document.querySelector("#addPost");
-  addPost.style.display = "none";
-});
-
-cancelAddBlog.addEventListener("click", (e) => {
-  e.preventDefault();
-  const addPost = document.querySelector("#addPost");
-  addPost.style.display = "none";
-});

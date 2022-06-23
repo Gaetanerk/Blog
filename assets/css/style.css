@@ -52,7 +52,7 @@
 #addNew {
   margin: 5em auto 0.5em auto;
   text-align: center;
-  width: 50vw;
+  width: 45vw;
   background-color: #31ac30;
   opacity: 0.7;
   padding: 2em;
@@ -320,11 +320,20 @@ li {
   color: red;
 }
 
+@media screen and (min-width: 1300px) {
+  #addNew {
+    width: 45vw;
+  }
+}
+
 @media screen and (max-width: 1000px) {
   #accueil,
   #new-user,
   #user {
     width: 30vw;
+  }
+  #addNew {
+    width: 55vw;
   }
 }
 
@@ -333,6 +342,9 @@ li {
   #new-user,
   #user {
     width: 40vw;
+  }
+  #addNew {
+    width: 65vw;
   }
 }
 
@@ -343,13 +355,7 @@ li {
   .title-user {
     font-size: 1rem;
   }
-}
-
-@media screen and (max-width: 600px) {
-  .title-main {
-    font-size: 1.4rem;
-  }
-  .title-user {
-    font-size: 1rem;
+  #addNew {
+    width: 75vw;
   }
 }
