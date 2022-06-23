@@ -16,22 +16,38 @@
   </head>
   <body>
     <div id="navBlog">
-      <a href=""><i class="fa-solid fa-house"></i></a>
+      <a href="./blog.php"><i class="fa-solid fa-house"></i></a>
     </div>
     <div id="contact">
-      <form action="" method="post">
+      <form action="traitementContact.php" method="post">
+        <h4>Votre nom :</h4>
+        <input type="text" name="name">
         <h4>Email :</h4>
         <input
           class="contactEmailInput inputForm"
           type="email"
           placeholder="email@email.com"
+          name="email"
         />
+        <h4>Sujet :</h4>
+        <input type="text" name="sujet">
         <h4>Votre message :</h4>
-        <textarea class="messageContact" rows="15" cols="50"></textarea>
+        <textarea class="messageContact" rows="15" cols="50" name="message"></textarea>
         <br />
-        <button id="btnSubmitContact" class="btn-submit">Valider</button>
+          <input type="hidden" id="recaptchaResponse" name="recaptcha-response">
+        <button id="btnSubmitContact" class="btn-submit">Envoyer</button>
       </form>
     </div>
+
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lcum6IgAAAAAFyux_5a6zWsS3IrqvhRqViNXYSY"></script>
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6Lcum6IgAAAAAFyux_5a6zWsS3IrqvhRqViNXYSY', {action: 'homepage'}).then(function(token) {
+                document.getElementById('recaptchaResponse').value = token
+            });
+        });
+    </script>
+
     <div id="errorMessage"></div>
   </body>
   <script src="./assets/js/scriptContact.js"></script>

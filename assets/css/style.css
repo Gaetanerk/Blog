@@ -27,10 +27,6 @@
   padding: 2em;
   border: 0.2em solid black;
   border-radius: 1em;
-  -webkit-border-radius: 1em;
-  -moz-border-radius: 1em;
-  -ms-border-radius: 1em;
-  -o-border-radius: 1em;
 }
 
 #contact,
@@ -43,10 +39,6 @@
   padding: 2em;
   border: 0.2em solid black;
   border-radius: 1em;
-  -webkit-border-radius: 1em;
-  -moz-border-radius: 1em;
-  -ms-border-radius: 1em;
-  -o-border-radius: 1em;
 }
 
 #addNew {
@@ -58,19 +50,11 @@
   padding: 2em;
   border: 0.2em solid black;
   border-radius: 1em;
-  -webkit-border-radius: 1em;
-  -moz-border-radius: 1em;
-  -ms-border-radius: 1em;
-  -o-border-radius: 1em;
 }
 
 .inputForm {
   border: 2px solid black;
   border-radius: 0.5em;
-  -webkit-border-radius: 0.5em;
-  -moz-border-radius: 0.5em;
-  -ms-border-radius: 0.5em;
-  -o-border-radius: 0.5em;
   padding: 0.3em;
 }
 
@@ -93,10 +77,6 @@
 .btn-submit {
   margin-top: 1rem;
   padding: 0.8em;
-  -webkit-border-radius: 15px;
-  -moz-border-radius: 15px;
-  -ms-border-radius: 15px;
-  -o-border-radius: 15px;
   border: none;
   border-radius: 15px;
   box-shadow: 0 0 8px rgb(207, 207, 207);
@@ -110,10 +90,6 @@
 .btn-submit:active {
   transform: scale(0.9);
   box-shadow: 3px 2px 2px 1px rgba(0, 0, 0, 0.24);
-  -webkit-transform: scale(0.9);
-  -moz-transform: scale(0.9);
-  -ms-transform: scale(0.9);
-  -o-transform: scale(0.9);
 }
 
 #back-main {
@@ -259,6 +235,7 @@ li {
   margin-top: 2em;
   border-radius: 2em 7em 3em 5em;
   box-shadow: -8px 8px 0px #aaa;
+  background-size: cover;
 }
 
 #detailArticle {
@@ -283,33 +260,29 @@ li {
   margin-top: 1em;
 }
 
-#btnChange {
-  margin-top: 1em;
-  letter-spacing: 1em;
+.formUpdate {
+  display: inline-block;
+  margin: 0.3em 0.3em 0 0.75em;
 }
 
-.btnChange {
+.formDelete {
+  display: inline-block;
+}
+
+.btnEditArticle, .btnDeleteArticle {
   padding: 0.4em;
-  font-size: 0.6em;
+  font-size: 0.8em;
   border: 1px solid black;
   border-radius: 0.7em;
-  -webkit-border-radius: 0.7em;
-  -moz-border-radius: 0.7em;
-  -ms-border-radius: 0.7em;
-  -o-border-radius: 0.7em;
 }
 
-.btnChange:hover {
+.btnEditArticle:hover, .btnDeleteArticle:hover {
   box-shadow: inset 0 0 8px #bbc3ca;
 }
 
-.btnChange:active {
+.btnEditArticle:active, .btnDeleteArticle:active {
   transform: scale(0.9);
   box-shadow: 3px 2px 2px 1px rgba(0, 0, 0, 0.24);
-  -webkit-transform: scale(0.9);
-  -moz-transform: scale(0.9);
-  -ms-transform: scale(0.9);
-  -o-transform: scale(0.9);
 }
 
 .fa-pencil {
@@ -318,6 +291,11 @@ li {
 
 .fa-x {
   color: red;
+}
+
+.modTitle {
+  margin: auto;
+  text-align: center;
 }
 
 @media screen and (min-width: 1300px) {

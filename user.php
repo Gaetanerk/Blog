@@ -15,58 +15,23 @@
     <a href="./index.html"><i class="fa-solid fa-arrow-left-long"></i></a>
   </div>
   <div id="new-user">
-    <?php
-
-    try {
-      $email = $_POST['email'] ?? null;
-      $mdp = $_POST['password'] ?? null;
-      $mdp = htmlspecialchars($mdp);
-
-      if (!is_null($mdp) && filter_var($email, FILTER_VALIDATE_EMAIL) !== false) {
-        require_once 'cnxBdd.php';
-
-        $stmt = $pdo->prepare("select * from user where email = :email");
-
-        if ($stmt->execute([
-          ':email' => $email
-        ])) {
-          if ($stmt->rowCount() === 1) {
-            $user = $stmt->fetch();
-
-            if (password_verify($mdp, $user['password'])) {
-              session_start();
-              $_SESSION['user'] = $user;
-
-              echo '
-            <div>
-              <strong>Bravo!</strong> Connecté avec succès
-              <br>
-              <a href="blog.php" > Accèder au blog  </a>.
-            </div>
-            ';
-            }
-          } else {
-            throw new Exception('<br>Adresse email ou mot de passe incorrect !');
-          }
-        }
-      }
-    } catch (PDOException | Exception $Exception) {
-      echo '
-            <div>
-              <strong>Erreur!</strong> ' . $Exception->getMessage() . '
-            </div>
-            ';
-    }
-
-    ?>
-    <form action="" method="POST">
+    <form action="traitementUser.php" method="POST">
       <h4>Adresse Email :</h4>
-      <input class="userInput inputForm" type="text" placeholder="Entrer votre adresse email" name="email" required />
+      <input class="userInput inputForm" type="email" placeholder="Entrer votre adresse email" name="email" required />
       <h4>Mot de passe :</h4>
       <input class="passwordInput inputForm" type="password" placeholder="Mot de passe" name="password" required />
       <br />
+        <input type="hidden" id="recaptchaResponse" name="recaptcha-response">
       <button id="btnSubmitNewUser" class="btn-submit">Valider</button>
     </form>
+      <script src="https://www.google.com/recaptcha/api.js?render=6Lcum6IgAAAAAFyux_5a6zWsS3IrqvhRqViNXYSY"></script>
+      <script>
+          grecaptcha.ready(function() {
+              grecaptcha.execute('6Lcum6IgAAAAAFyux_5a6zWsS3IrqvhRqViNXYSY', {action: 'homepage'}).then(function(token) {
+                  document.getElementById('recaptchaResponse').value = token
+              });
+          });
+      </script>
   </div>
   <div id="errorMessage"></div>
 </body>

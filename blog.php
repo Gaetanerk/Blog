@@ -13,7 +13,9 @@ if(isset($_SESSION['user'])){
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./assets/css/style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>Mon Blog</title>
 </head>
 
@@ -29,8 +31,9 @@ if(isset($_SESSION['user'])){
   </div>
   <div id="lignGreen"></div>
   <div id="addArticle">
+    <i id="iconAddMore" class="fa-solid fa-plus"></i>
     <button class="addLink" type="submit">
-      <i class="fa-solid fa-plus"></i> Ajouter un article
+       Ajouter un article
     </button>
   </div>
   <div id="lignGreen"></div>
@@ -40,32 +43,33 @@ if(isset($_SESSION['user'])){
       $title = htmlspecialchars($title);
       $category = $_POST['category'] ?? false;
       $category = htmlspecialchars($category);
-      $picture = $_POST['picture'] ?? false;
+      $picture = "pict".date("dmYHis")."."."jpg" ?? false;
       $desc = $_POST['desc'] ?? false;
       $desc = htmlspecialchars($desc);
+      $user = $_SESSION['user'] ?? false;
 
-      if (strlen($title) > 0 && strlen($category) > 0 && strlen($desc) > 0) {
+    if (strlen($title) > 0 && strlen($category) > 0 && strlen($desc) > 0) {
 
-          try {
-              require_once 'cnxBdd.php';
+        try {
+            require_once 'cnxBdd.php';
 
-              $req = $pdo->prepare('insert into article values (null, :title, :category, :picture, :desc, NOW())');
-              $req->execute([
-                  ':title' => $title,
-                  ':category' => $category,
-                  ':picture' => $picture,
-                  ':desc' => $desc
-              ]);
-              }
-          catch
-              (PDOException | DomainException $Exception) {
-                  echo '
+            $req = $pdo->prepare('insert into article values (null, :title, :category, :picture, :desc, :user, NOW())');
+            $req->execute([
+                ':title' => $title,
+                ':category' => $category,
+                ':picture' => $picture,
+                ':desc' => $desc,
+                ':user' => $user
+            ]);
+        } catch
+        (PDOException|DomainException $Exception) {
+            echo '
             <div>
               <strong>Erreur!<br>' . $Exception->getMessage() . '</strong>
             </div>
             ';
-              }
-        };
+        }
+    };
       ?>
     <form id='addNew' action='' method='POST' enctype='multipart/form-data'>
       <h4>Titre de votre article :</h4>
@@ -79,7 +83,7 @@ if(isset($_SESSION['user'])){
       <h4>Décrire votre voyage :</h4>
       <textarea class='addDesc' cols='60' rows='10' name='desc'></textarea>
       <br />
-      <button class='submitAddNewArticle' type='submit'>Valider</button>
+      <button class='submitAddNewArticle' type='submit' name="submitArticle">Valider</button>
     </form>
   </div>
 
@@ -89,30 +93,51 @@ if(isset($_SESSION['user'])){
 <?php
 require_once 'cnxBdd.php';
 
-$stmt = $pdo->query("select * from article");
+$stmt = $pdo->query("select * from article order by id desc");
 $result = $stmt->fetchAll();
 
 foreach ($result as $key => $article) {
-    $dateCreation = new DateTime($article['dateCreation']);
-    echo"
+    if (isset($_POST['submitArticle'])) {
+        $originName = $_FILES['picture']['name'];
+        $elementsPath = pathinfo($originName);
+        $extensionFile = $elementsPath['extension'];
+        $extensionAutorised = array("jpg");
+        if (!(in_array($extensionFile, $extensionAutorised))) {
+            echo "Le fichier n'a pas l'extension attendue";
+        } else {
+            $folderDestination = dirname(__FILE__) . "/images/{$article['id']}/";
+            $nameDestination = "pict" . date("dmYHis") . "." . $extensionFile;
+            if (!file_exists($folderDestination)) {
+                mkdir($folderDestination, 0777, true);
+            }
+            move_uploaded_file($_FILES["picture"]["tmp_name"],
+                $folderDestination . $nameDestination);
+        }
+    }
+}
+
+    foreach ($result as $key => $article) {
+        $dateCreation = new DateTime($article['dateCreation']);
+        echo "
           <li>
-          <img class='newAddPict'>{$article['picture']}</img>
+          <img class='newAddPict' src='./images/{$article['id']}/{$article['picture']}'></img>
           <h6 class='newAddTitle'>{$article['title']}</h6>
           <p class='newCatBlog'>{$article['category']}</p>
           <button class='newAddBtn'>Voir les détails</button>
-          <p>Posté le {$dateCreation->format('d/m/Y H:i:s')}</p>
-          <p>
-            <form action='updateArticle.php' method='POST' >
+          <p>Posté le {$dateCreation->format('d/m/Y H:i:s')} par {$article['user']}</p>
+          <p class='btnModify'></p>
+            <form action='updateArticle.php' method='POST' class='formUpdate'>
               <input type='hidden' name='id' value='{$article['id']}'>
-              <button type='submit' >Modifier</button>
+              <button class='btnEditArticle' type='submit' ><i class='fa-solid fa-pencil'></i> Modifier</button>
             </form>
-            <form action='deleteArticle.php' method='POST' >
+            <form action='deleteArticle.php' method='POST' class='formDelete'>
               <input type='hidden' name='id' value='{$article['id']}'>
-              <button type='submit' >Supprimer</button>
+              <button class='btnDeleteArticle' type='submit' ><i class='fa-solid fa-x'></i> Supprimer</button>
           </p>
             </form>
           </li>
-          ";}
+          ";
+}
       ?>
     </ul>
   </div>
