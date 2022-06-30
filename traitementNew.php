@@ -29,37 +29,37 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $data = json_decode($response);
             if($data->success){
                 if(
-                    isset($_POST['userName']) && !empty($_POST['userName']) &&
+                    isset($_POST['login']) && !empty($_POST['login']) &&
                     isset($_POST['email']) && !empty($_POST['email']) &&
                     isset($_POST['email2']) && !empty($_POST['email2']) &&
                     isset($_POST['password']) && !empty($_POST['password'])
                 ){
                     // On nettoie le contenu
-                    $userName = strip_tags($_POST['userName']);
+                    $login = strip_tags($_POST['login']);
                     $email = strip_tags($_POST['email']);
                     $email2 = strip_tags($_POST['email2']);
                     $password = strip_tags($_POST['password']);
 
                     // Ici vous traitez vos données
-                    $userName = $_POST['userName'] ?? null;
-                    $userName = htmlspecialchars($userName);
+                    $login = $_POST['login'] ?? null;
+                    $login = htmlspecialchars($login);
                     $email = $_POST['email'] ?? null;
                     $password = $_POST['password'] ?? null;
 
 //on fait qq verif
-                    if (!is_null($userName) && filter_var($email, FILTER_VALIDATE_EMAIL) && !is_null($password)) {
+                    if (!is_null($login) && filter_var($email, FILTER_VALIDATE_EMAIL) && !is_null($password)) {
 
                         require_once 'cnxBdd.php';
 
-                        $req = $pdo->prepare('insert into user values (null, :user, :email, :password)');
+                        $req = $pdo->prepare('insert into user values (null, :login, :email, :password)');
                         if ($req->execute([
-                            ':user' => $userName,
+                            ':login' => $login,
                             ':email' => $email,
                             ':password' => password_hash($password, PASSWORD_ARGON2I)
                         ])) {
                             echo "
             <div>
-              <strong>Bravo!</strong> Compte {$userName} créé avec succès
+              <strong>Bravo!</strong> Compte {$login} créé avec succès
               <br>
               <a href='./user.php'>Connectez vous</a>
             </div>

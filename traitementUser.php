@@ -48,16 +48,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             ':email' => $email
                         ])) {
                             if ($stmt->rowCount() === 1) {
-                                $user = $stmt->fetch();
+                                $login = $stmt->fetch();
 
-                                if (password_verify($password, $user['password'])) {
+                                if (password_verify($password, $login['password'])) {
                                     session_start();
-                                    $_SESSION['user'] = $user;
+                                    $_SESSION['login'] = $login;
                                     header('Location:./blog.php');
                                     exit;
                                 } else {
-                                   //pwd ko
                                     header('Location: user.php');
+                                    exit;
                                 }
                             } else {
                                 throw new Exception('<br>Adresse email ou mot de passe incorrect !');

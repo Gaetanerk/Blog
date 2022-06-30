@@ -1,3 +1,10 @@
+<?php
+session_start();
+if(isset($_SESSION['login'])){
+    var_dump($_SESSION['login']['login']);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -40,47 +47,46 @@
             ';
     }
 
-    $id = $_POST['id'] ?? null;
-    $id = (int)$id;
-    $title = $_POST['title'] ?? null;
-    $category = $_POST['category'] ?? null;
-    $picture = $_POST['picture'] ?? null;
-    $desc = $_POST['desc'] ?? null;
-    $user = $_SESSION['user'] ?? false;
-    $user = htmlspecialchars($user);
+        $id = $_POST['id'] ?? null;
+        $id = (int)$id;
+        $title = $_POST['title'] ?? null;
+        $category = $_POST['category'] ?? null;
+        $picture = $_POST['picture'] ?? null;
+        $desc = $_POST['desc'] ?? null;
+        $login = $_SESSION['login']['login'] ?? false;
 
-    if (strlen($title) > 0 && $category > 0 && $desc > 0) {
+        if ($title > 0 && $category > 0 && $desc > 0) {
 
-        try {
-            require_once 'cnxBdd.php';
+            try {
+                require_once 'cnxBdd.php';
 
-            $req = $pdo->prepare('update article set null, :title, :category, :picture, :desc, :user, NOW()');
-            $req->execute([
-                ':title' => $title,
-                ':category' => $category,
-                ':picture' => $picture,
-                ':desc' => $desc,
-                ':user' => $user
-            ]);
+                $req = $pdo->prepare('update article set title = :title, category =  :category,picture =  :picture, description = :description, login = :login where id = :id');
+                $req->execute([
+                    ':title' => $title,
+                    ':category' => $category,
+                    ':picture' => $picture,
+                    ':description' => $desc,
+                    ':login' => $login
+                ]);
 
-            echo '
+                echo '
             <div>
               <strong>Bravo!</strong> Article modifié avec succès 
-              <a href="blog.php" > Voir le blog </a>.
+              <a href="blog.php" > Retour au blog </a>.
             </div>
             ';
 
-//        } catch (Exception $Exception){
-        } catch (PDOException|DomainException $Exception) {
-            echo '
+        } catch (Exception $Exception){
+            } catch (PDOException|DomainException $Exception) {
+                echo '
             <div>
               <button type="button" ></button>
               <strong>Erreur!</strong> <a href="#" >Une erreur est survenue : ' . $Exception->getMessage() . '
             </a>
             </div>
             ';
+            }
         }
-    }
 
     ?>
     <form id="addNew" action="" method="POST">
@@ -92,7 +98,7 @@
         <input class="addPict" type="file" name="picture" accept="image/jpeg" />
         <br />
         <h4>Décrire votre voyage :</h4>
-        <textarea class="addDesc" cols="100" rows="20" name="desc" value="<?php echo $article['desc'] ?>" ></textarea>
+        <textarea class="addDesc" cols="100" rows="20" name="desc" ><?php echo $article['description'] ?></textarea>
         <br />
         <input type="hidden" name="id" value="<?php echo $article["id"] ?>" >
         <button class="btn-submit" type="submit" >Modifier</button>

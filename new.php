@@ -17,7 +17,7 @@
   <div id="new-user">
     <form action="traitementNew.php" method="POST">
       <h4>Nom d'utilisateur :</h4>
-      <input class="userInput inputForm" type="text" placeholder="Nom d'utilisateur" name="userName" required />
+      <input class="userInput inputForm" type="text" placeholder="Nom d'utilisateur" name="login" required />
       <h4>Email :</h4>
       <input class="emailInput inputForm" type="email" placeholder="email@email.com" name="email" required />
       <h4>Retaper Email :</h4>
