@@ -1,21 +1,15 @@
 <?php
 session_start();
-?>
-
-<?php
 
 try {
     require_once 'cnxBdd.php';
 
-    //je recupere l'id posté
     $id = $_POST['id'] ?? false;
     $id = (int)$id;
 
     $stmt = $pdo->query('select * from article');
     $result = $stmt->fetchAll();
 
-
-    //si il n'est pas valide, je declenche une erreur (met fin a l'execution)
     if ($id <= 0) {
         throw new Exception('Erreur lors de la suppression de l\'article (id)');
 }
@@ -27,7 +21,7 @@ try {
         ':id' => $id
     ]);
     foreach ($result as $key => $article) {
-        if ($article['id'] == $id) {
+        if ($article['id'] == $id && $article['login'] == $_SESSION['login']['login']) {
             $file = "./images/{$article['id']}/{$article['picture']}";
                 if(file_exists($file)) {
                     unlink($file);

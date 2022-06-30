@@ -19,7 +19,7 @@
       <h4>Adresse Email :</h4>
       <input class="userInput inputForm" type="email" placeholder="Entrer votre adresse email" name="email" required />
       <h4>Mot de passe :</h4>
-      <input class="passwordInput inputForm" type="password" placeholder="Mot de passe" name="password" required />
+        <input class="passwordInput inputForm" type="password" placeholder="Mot de passe" name="password" required />
       <br />
         <input type="hidden" id="recaptchaResponse" name="recaptcha-response">
       <button id="btnSubmitNewUser" class="btn-submit">Valider</button>
