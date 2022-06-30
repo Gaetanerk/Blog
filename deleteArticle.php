@@ -27,7 +27,7 @@ try {
         ':id' => $id
     ]);
     foreach ($result as $key => $article) {
-        if ($article['id'] == $id) {
+        if ($article['id'] == $id && $article['login'] == $_SESSION['login']['login']) {
             $file = "./images/{$article['id']}/{$article['picture']}";
                 if(file_exists($file)) {
                     unlink($file);

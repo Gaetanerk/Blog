@@ -115,6 +115,7 @@ session_start();
 
         foreach ($result as $key => $article) {
             $dateCreation = new DateTime($article['dateCreation']);
+        if ($article['login'] == $login) {
             echo "
           <li>
           <img class='newAddPict' src='./images/{$article['id']}/{$article['picture']}'></img>
@@ -123,18 +124,28 @@ session_start();
           <button class='newAddBtn'>Voir les détails</button>
           <p>Posté le {$dateCreation->format('d/m/Y H:i:s')} par {$article['login']}</p>
           <p class='btnModify'>
-            <form action='updateArticle.php' method='POST' class='formUpdate'>
+            <form action='updateArticle.php' method='POST' class='formUpdate' name='updateArticle'>
               <input type='hidden' name='id' value='{$article['id']}'>
               <button class='btnEditArticle' type='submit' ><i class='fa-solid fa-pencil'></i> Modifier</button>
             </form>
-            <form action='deleteArticle.php' method='POST' class='formDelete'>
+            <form action='deleteArticle.php' method='POST' class='formDelete' name='deleteArticle'>
               <input type='hidden' name='id' value='{$article['id']}'>
               <button class='btnDeleteArticle' type='submit' ><i class='fa-solid fa-x'></i> Supprimer</button>    
             </form>    
             </p>    
           </li>
-            </form>
           ";
+        } else {
+            echo "
+          <li>
+          <img class='newAddPict' src='./images/{$article['id']}/{$article['picture']}'></img>
+          <h6 class='newAddTitle'>{$article['title']}</h6>
+          <p class='newCatBlog'>{$article['category']}</p>
+          <button class='newAddBtn'>Voir les détails</button>
+          <p>Posté le {$dateCreation->format('d/m/Y H:i:s')} par {$article['login']}</p>   
+          </li>
+          ";
+        }
         }
         ?>
     </ul>

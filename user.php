@@ -20,6 +20,10 @@
       <input class="userInput inputForm" type="email" placeholder="Entrer votre adresse email" name="email" required />
       <h4>Mot de passe :</h4>
       <input class="passwordInput inputForm" type="password" placeholder="Mot de passe" name="password" required />
+        <div class="password-icon">
+            <i data-feather="eye"></i>
+            <i data-feather="eye-off"></i>
+        </div>
       <br />
         <input type="hidden" id="recaptchaResponse" name="recaptcha-response">
       <button id="btnSubmitNewUser" class="btn-submit">Valider</button>
@@ -35,6 +39,11 @@
   </div>
   <div id="errorMessage"></div>
 </body>
+<script src="https://unpkg.com/feather-icons"></script>
+<script>
+    feather.replace();
+</script>
 <script src="./assets/js/scriptNewUser.js"></script>
+<script src="./assets/js/eye.js"></script>
 
 </html>
