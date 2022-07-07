@@ -71,7 +71,7 @@ session_start();
     <form id='addNew' action='' method='POST' enctype='multipart/form-data'>
         <h4>Titre de votre article :</h4>
         <input class='addTitle' type='text' name='title' />
-        <h4>Catégorie :</h4>
+        <h4>Pays :</h4>
         <input class='addCat' type='text' name='category' />
         <h4>Choisir une photo :</h4>
         <input type="hidden" name="MAX_FILE_SIZE" value="600000" />
