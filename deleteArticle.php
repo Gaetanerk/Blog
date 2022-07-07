@@ -32,7 +32,7 @@ try {
 
     echo '
             <form action="" method="post">
-              <strong>Bravo! Article supprimé avec succès !</strong>
+              <strong>Article supprimé avec succès !</strong>
               <br>
               <a href="./blog.php">Retour au blog</a>
             </form>

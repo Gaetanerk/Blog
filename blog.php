@@ -71,14 +71,14 @@ session_start();
     <form id='addNew' action='' method='POST' enctype='multipart/form-data'>
         <h4>Titre de votre article :</h4>
         <input class='addTitle' type='text' name='title' />
-        <h4>Pays :</h4>
+        <h4>Catégorie :</h4>
         <input class='addCat' type='text' name='category' />
         <h4>Choisir une photo :</h4>
         <input type="hidden" name="MAX_FILE_SIZE" value="600000" />
         <input class='addPict' type='file' name='picture' accept='image/jpeg' />
         <br />
         <h4>Décrire votre voyage :</h4>
-        <textarea class='addDesc' cols='60' rows='10' name='description'></textarea>
+        <textarea class='addDesc' cols='60' rows='10' name='desc'></textarea>
         <br />
         <button class='submitAddNewArticle' type='submit' name="submitArticle">Valider</button>
     </form>
@@ -124,16 +124,17 @@ session_start();
           <button class='newAddBtn'>Voir les détails</button>
           <p>Posté le {$dateCreation->format('d/m/Y H:i:s')} par {$article['login']}</p>
           <p class='btnModify'>
-            <form action='updateArticle.php' method='POST' class='formUpdate' name='updateArticle'>
+            <form action='updateArticle.php' method='POST' class='formUpdate'>
               <input type='hidden' name='id' value='{$article['id']}'>
               <button class='btnEditArticle' type='submit' ><i class='fa-solid fa-pencil'></i> Modifier</button>
             </form>
-            <form action='deleteArticle.php' method='POST' class='formDelete' name='deleteArticle'>
+            <form action='deleteArticle.php' method='POST' class='formDelete'>
               <input type='hidden' name='id' value='{$article['id']}'>
               <button class='btnDeleteArticle' type='submit' ><i class='fa-solid fa-x'></i> Supprimer</button>    
             </form>    
             </p>    
           </li>
+            </form>
           ";
         } else {
             echo "
