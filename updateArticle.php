@@ -56,7 +56,10 @@ session_start();
         echo "ok not false<br>";
         $stmt = $pdo->query("select * from article order by id desc");
         $result = $stmt->fetchAll();
-        if ($article['id'] == $id && $article['login'] == $_SESSION['login']['login']) {
+        foreach ($stmt as $article){
+
+
+            if ($article['id'] === $id && $article['login'] === $_SESSION['login']['login']) {
                 $file = "./images/{$article['id']}/{$article['picture']}";
                 unlink($file);
                 $newOriginName = $_FILES['picture']['name'];
@@ -70,10 +73,15 @@ session_start();
                     $newNameDestination = "pict" . date("dmYHis") . "." . $newExtensionFile;
                     move_uploaded_file($_FILES["picture"]["tmp_name"],
                         $newFolderDestination . $newNameDestination);
+                    echo 'ok 1';
+                    die();
                 }
-                echo 'ok 1';
+
             }
         }
+
+        }
+
 
     if ($title > 0 && $category > 0 && $desc > 0) {
         require_once 'cnxBdd.php';
