@@ -30,13 +30,7 @@ try {
         }
     }
 
-    echo '
-            <form action="" method="post">
-              <strong>Article supprimé avec succès !</strong>
-              <br>
-              <a href="./blog.php">Retour au blog</a>
-            </form>
-            ';
+    header('Location: blog.php');
 
 } catch (Exception $exception) {
     echo '

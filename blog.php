@@ -74,7 +74,7 @@ session_start();
         <h4>Pays :</h4>
         <input class='addCat' type='text' name='category' />
         <h4>Choisir une photo :</h4>
-        <input type="hidden" name="MAX_FILE_SIZE" value="600000" />
+        <input type="hidden" name="MAX_FILE_SIZE" value="200000" />
         <input class='addPict' type='file' name='picture' accept='image/jpeg' />
         <br />
         <h4>Décrire votre voyage :</h4>

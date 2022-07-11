@@ -26,7 +26,9 @@ session_start();
         if ($id <= 0) {
             throw new Exception('Erreur lors de la récuperation de l\'article (id)');
         }
+        //je prépare ma requet1e
         $req = $pdo->prepare('select *  from article where id = :id');
+        // je l'execute avec les parametres necessaire
         $req->execute([
             ':id' => $id
         ]);
@@ -36,74 +38,76 @@ session_start();
     } catch (Exception $exception) {
         echo '
             <div>
-              <button type="button" ></button>
               <strong>Une erreur est survenue : ' . $exception->getMessage() . '</strong>
             </div>
             ';
     }
 
-        $id = $_POST['id'] ?? null;
-        $id = (int)$id;
-        $title = $_POST['title'] ?? null;
-        $category = $_POST['category'] ?? null;
-        $picture = $article['picture'] ?? null;
-        $description = $_POST['desc'] ?? null;
-        $login = $_SESSION['login']['login'] ?? false;
+    $id = $_POST['id'] ?? null;
+    $id = (int)$id;
+    $title = $_POST['title'] ?? null;
+    $category = $_POST['category'] ?? null;
+    $picture = "pict".date("dmYHis")."."."jpg" ?? false;
+    $desc = $_POST['desc'] ?? null;
+    $login = $_SESSION['login']['login'] ?? false;
+    $newPicture = $_POST['picture'] ?? false;
 
-
-    if (isset($title) && isset($category) && isset($description)) {
-        require_once 'cnxBdd.php';
-        $req = $pdo->prepare('update article set title = :title, category = :category, picture = :picture, description = :description, login = :login where id = :id');
-                $req->execute([
-                    ':title' => $title,
-                    ':category' => $category,
-                    ':picture' => $picture,
-                    ':description' => $description,
-                    ':login' => $login,
-                    ':id' => $id
-                ]);
-                header('location:blog.php');
-
-        $picture = $_POST['picture'];
-        if (isset($picture)){
-            $stmt = $pdo->query('select * from article');
-            $result = $stmt->fetchAll();
-            foreach ($result as $key => $article) {
-                if ($article['id'] == $id && $article['login'] == $_SESSION['login']['login']) {
-                    $file = "./images/{$article['id']}/{$article['picture']}";
-                    if(file_exists($file)) {
-                        unlink($file);
-                        rmdir("./images/{$article['id']}");
-
-                    }
+    if (!$newPicture===false) {
+        echo "ok not false<br>";
+        $stmt = $pdo->query("select * from article order by id desc");
+        $result = $stmt->fetchAll();
+        if ($article['id'] == $id && $article['login'] == $_SESSION['login']['login']) {
+                $file = "./images/{$article['id']}/{$article['picture']}";
+                unlink($file);
+                $newOriginName = $_FILES['picture']['name'];
+                $newElementsPath = pathinfo($newOriginName);
+                $newExtensionFile = $newElementsPath['extension'];
+                $newExtensionAutorised = array("jpg");
+                if (!(in_array($newExtensionFile, $newExtensionAutorised))) {
+                    echo "Le fichier n'a pas l'extension attendue";
+                } else {
+                    $newFolderDestination = dirname(__FILE__) . "/images/{$article['id']}/";
+                    $newNameDestination = "pict" . date("dmYHis") . "." . $newExtensionFile;
+                    move_uploaded_file($_FILES["picture"]["tmp_name"],
+                        $newFolderDestination . $newNameDestination);
                 }
+                echo 'ok 1';
             }
-            $req = $pdo->prepare('update article set title = :title, category = :category, picture = :picture, description = :description, login = :login where id = :id');
-            $req->execute([
-                ':title' => $title,
-                ':category' => $category,
-                ':picture' => $picture,
-                ':description' => $description,
-                ':login' => $login,
-                ':id' => $id
-            ]);
-            header('location:blog.php');
         }
-        }
+
+    if ($title > 0 && $category > 0 && $desc > 0) {
+        require_once 'cnxBdd.php';
+
+        $req = $pdo->prepare('update article set title = :title, category =  :category,picture =  :picture, description = :description, login = :login where id = :id');
+        $req->execute([
+            ':id' => $id,
+            ':title' => $title,
+            ':category' => $category,
+            ':picture' => $picture,
+            ':description' => $desc,
+            ':login' => $login
+        ]);
+        echo 'ok 2';
+//        header('Location:blog.php');
+
+}
+
     ?>
     <form id="addNew" action="" method="POST">
         <h4>Titre de votre article :</h4>
         <input class="addTitle" type="text" name="title" value="<?php echo $article['title'] ?>" />
-        <h4>Catégorie :</h4>
+        <h4>Pays :</h4>
         <input class="addCat" type="text" name="category" value="<?php echo $article['category'] ?>" />
         <h4>Choisir une photo :</h4>
+        <input type="hidden" name="MAX_FILE_SIZE" value="200000" />
         <input class="addPict" type="file" name="picture" accept="image/jpeg" />
         <br />
         <h4>Décrire votre voyage :</h4>
-        <textarea class="addDesc" cols="80" rows="20" name="desc" ><?php echo $article['description'] ?></textarea>
+        <textarea class="addDesc" cols="100" rows="20" name="desc" ><?php echo $article['description'] ?></textarea>
         <br />
         <input type="hidden" name="id" value="<?php echo $article["id"] ?>" >
-        <button class="btn-submit" type="submit" >Modifier</button>
+        <button class="btn-submit" type="upSubmit" >Modifier</button>
+
     </form>
 </main>
 </body>
