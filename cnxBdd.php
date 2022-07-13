@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
 
 $dsn = 'mysql:dbname=toto;host=localhost;port=3306;charset=utf8';
 

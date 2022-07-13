@@ -40,21 +40,23 @@ session_start();
     $title = htmlspecialchars($title);
     $category = $_POST['category'] ?? false;
     $category = htmlspecialchars($category);
-    $picture = "pict".date("dmYHis")."."."jpg" ?? false;
+    $picture = $_POST['picture'] ?? false;
+    $picture = htmlspecialchars($picture);
+    $newPicture =  "pict".date("dmYHis")."."."jpg";
     $desc = $_POST['desc'] ?? false;
     $desc = htmlspecialchars($desc);
     $login = $_SESSION['login']['login'] ?? false;
 
     if (strlen($title) > 0 && strlen($category) > 0 && strlen($desc) > 0) {
-
         try {
             require_once 'cnxBdd.php';
+
 
             $req = $pdo->prepare('insert into article values (null, :title, :category, :picture, :desc, :login, NOW())');
             $req->execute([
                 ':title' => $title,
                 ':category' => $category,
-                ':picture' => $picture,
+                ':picture' => $newPicture,
                 ':desc' => $desc,
                 ':login' => $login
             ]);
@@ -65,8 +67,8 @@ session_start();
               <strong>Erreur!<br>' . $Exception->getMessage() . '</strong>
             </div>
             ';
-        }
-    };
+            }
+        };
     ?>
     <form id='addNew' action='' method='POST' enctype='multipart/form-data'>
         <h4>Titre de votre article :</h4>
@@ -121,7 +123,10 @@ session_start();
           <img class='newAddPict' src='./images/{$article['id']}/{$article['picture']}'></img>
           <h6 class='newAddTitle'>{$article['title']}</h6>
           <p class='newCatBlog'>{$article['category']}</p>
+          <form action='./Details.php' method='post'>
+          <input type='hidden' name='idArticle' value='{$article['id']}'>
           <button class='newAddBtn'>Voir les détails</button>
+          </form>
           <p>Posté le {$dateCreation->format('d/m/Y H:i:s')} par {$article['login']}</p>
           <p class='btnModify'>
             <form action='updateArticle.php' method='POST' class='formUpdate'>
@@ -142,7 +147,10 @@ session_start();
           <img class='newAddPict' src='./images/{$article['id']}/{$article['picture']}'></img>
           <h6 class='newAddTitle'>{$article['title']}</h6>
           <p class='newCatBlog'>{$article['category']}</p>
+          <form action='./Details.php' method='post'>
+          <input type='hidden' name='idArticle' value='{$article['id']}'>
           <button class='newAddBtn'>Voir les détails</button>
+          </form>
           <p>Posté le {$dateCreation->format('d/m/Y H:i:s')} par {$article['login']}</p>   
           </li>
           ";
