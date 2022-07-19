@@ -54,7 +54,7 @@ session_start();
         <textarea class="addDesc" cols="100" rows="20" name="desc" ><?php echo $article['description'] ?></textarea>
         <br />
         <input type="hidden" name="id" value="<?php echo $article["id"] ?>" >
-        <button class="btn-submit" type="upSubmit" >Modifier</button>
+        <button class="btn-submit" type="submit" name="upSubmit" >Modifier</button>
     </form>
     <?php
     require_once 'cnxBdd.php';
@@ -63,17 +63,16 @@ session_start();
     $id = (int)$id;
     $title = $_POST['title'] ?? null;
     $category = $_POST['category'] ?? null;
-    $picture = $article['picture'] ?? null;
+    $picture = $article['picture'] ?? false;
     $desc = $_POST['desc'] ?? null;
     $login = $_SESSION['login']['login'] ?? false;
-    $newPicture = $_FILES['newPicture'] ?? false;
 
-    if ($newPicture!==false) {
-        $picture = "pict".date("dmYHis")."."."jpg";
-        $stmt = $pdo->query("select * from article order by id desc");
-        $result = $stmt->fetchAll();
-        foreach ($result as $key => $article){
-            if ($article['id'] === $id && $article['login'] === $_SESSION['login']['login']) {
+    if (!empty($_FILES['newPicture']['name'])) {
+            $picture = "pict" . date("dmYHis") . "." . "jpg";
+            $stmt = $pdo->query("select * from article order by id desc");
+            $result = $stmt->fetchAll();
+            foreach ($result as $key => $article) {
+                if ($article['id'] === $id && $article['login'] === $_SESSION['login']['login']) {
                     $file = "./images/{$article['id']}/{$article['picture']}";
                     unlink($file);
                     $originName = $_FILES['newPicture']['name'];
@@ -95,7 +94,7 @@ session_start();
     if ($title > 0 && $category > 0 && $desc > 0) {
         require_once 'cnxBdd.php';
 
-        $req = $pdo->prepare('update article set title = :title, category =  :category,picture =  :picture, description = :description, login = :login where id = :id');
+        $req = $pdo->prepare('update article set title = :title, category = :category,picture = :picture, description = :description, login = :login where id = :id');
         $req->execute([
             ':id' => $id,
             ':title' => $title,
@@ -104,8 +103,8 @@ session_start();
             ':description' => $desc,
             ':login' => $login
         ]);
-
         header('Location:blog.php');
+
     }
     ?>
 </main>
