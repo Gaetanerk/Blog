@@ -7,10 +7,10 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <title>Ajouter un article</title>
-    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="stylesheet" href="./assets/css/style.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
           integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
 <body>
 <main>
@@ -47,64 +47,68 @@ session_start();
         <h4>Pays :</h4>
         <input class="addCat" type="text" name="category" value="<?php echo $article['category'] ?>"/>
         <h4>Choisir une photo :</h4>
-        <input type="hidden" name="MAX_FILE_SIZE" value="200000" />
         <input class="addPict" type="file" name="newPicture" accept="image/jpeg"/>
-        <br />
+        <br/>
         <h4>Décrire votre voyage :</h4>
-        <textarea class="addDesc" cols="100" rows="20" name="desc" ><?php echo $article['description'] ?></textarea>
-        <br />
-        <input type="hidden" name="id" value="<?php echo $article["id"] ?>" >
-        <button class="btn-submit" type="submit" name="upSubmit" >Modifier</button>
+        <textarea class="addDesc" name="desc"><?php echo $article['description'] ?></textarea>
+        <br/>
+        <input type="hidden" name="id" value="<?php echo $article["id"] ?>">
+        <button class="btn-submit" type="submit" name="upSubmit">Modifier</button>
     </form>
     <?php
     require_once 'cnxBdd.php';
 
-    $id = $_POST['id'] ?? null;
+    $id = $_POST['id'] ?? false;
     $id = (int)$id;
-    $title = $_POST['title'] ?? null;
-    $category = $_POST['category'] ?? null;
+    $title = $_POST['title'] ?? false;
+    $category = $_POST['category'] ?? false;
     $picture = $article['picture'] ?? false;
-    $desc = $_POST['desc'] ?? null;
+    $desc = $_POST['desc'] ?? false;
     $login = $_SESSION['login']['login'] ?? false;
 
     if (!empty($_FILES['newPicture']['name'])) {
-            $picture = "pict" . date("dmYHis") . "." . "jpg";
-            $stmt = $pdo->query("select * from article order by id desc");
-            $result = $stmt->fetchAll();
-            foreach ($result as $key => $article) {
-                if ($article['id'] === $id && $article['login'] === $_SESSION['login']['login']) {
-                    $file = "./images/{$article['id']}/{$article['picture']}";
-                    unlink($file);
-                    $originName = $_FILES['newPicture']['name'];
-                    $elementsPath = pathinfo($originName);
-                    $extensionFile = $elementsPath['extension'];
-                    $extensionAutorised = array("jpg");
-                    if (!(in_array($extensionFile, $extensionAutorised))) {
-                        echo "Le fichier n'a pas l'extension attendue";
-                    } else {
-                        $folderDestination = dirname(__FILE__) . "/images/{$article['id']}/";
-                        $nameDestination = "pict" . date("dmYHis") . "." . $extensionFile;
-                        move_uploaded_file($_FILES["newPicture"]["tmp_name"],
-                            $folderDestination . $nameDestination);
-                    }
+        $picture = "pict" . date("dmYHis") . "." . "jpg";
+        $stmt = $pdo->query("select * from article order by id desc");
+        $result = $stmt->fetchAll();
+        foreach ($result as $key => $article) {
+            if ($article['id'] === $id && $article['login'] === $_SESSION['login']['login']) {
+                $file = "./images/{$article['id']}/{$article['picture']}";
+                unlink($file);
+                $originName = $_FILES['newPicture']['name'];
+                $elementsPath = pathinfo($originName);
+                $extensionFile = $elementsPath['extension'];
+                $extensionAutorised = array("jpg");
+                if (!(in_array($extensionFile, $extensionAutorised))) {
+                    echo "Le fichier n'a pas l'extension attendue";
+                } else {
+                    $folderDestination = dirname(__FILE__) . "/images/{$article['id']}/";
+                    $nameDestination = "pict" . date("dmYHis") . "." . $extensionFile;
+                    move_uploaded_file($_FILES["newPicture"]["tmp_name"],
+                        $folderDestination . $nameDestination);
                 }
             }
         }
+    }
 
     if ($title > 0 && $category > 0 && $desc > 0) {
         require_once 'cnxBdd.php';
+        $maxSize = $_FILES['newPicture']['size'];
+        $maxSize = (int)$maxSize;
+        if ($maxSize > 2000000) {
+            header('Location:errorSize.html');
+        } else {
 
-        $req = $pdo->prepare('update article set title = :title, category = :category,picture = :picture, description = :description, login = :login where id = :id');
-        $req->execute([
-            ':id' => $id,
-            ':title' => $title,
-            ':category' => $category,
-            ':picture' => $picture,
-            ':description' => $desc,
-            ':login' => $login
-        ]);
-        header('Location:blog.php');
-
+            $req = $pdo->prepare('update article set title = :title, category = :category,picture = :picture, description = :description, login = :login where id = :id');
+            $req->execute([
+                ':id' => $id,
+                ':title' => $title,
+                ':category' => $category,
+                ':picture' => $picture,
+                ':description' => $desc,
+                ':login' => $login
+            ]);
+            header('Location:blog.php');
+        }
     }
     ?>
 </main>

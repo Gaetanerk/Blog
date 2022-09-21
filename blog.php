@@ -6,13 +6,13 @@ session_start();
 <html lang="fr">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./assets/css/style.css" />
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="./assets/css/style.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
           integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <title>Mon Blog</title>
 </head>
 
@@ -36,52 +36,54 @@ session_start();
 <div id="lignGreen"></div>
 <div id="addPost">
     <?php
+    require_once 'cnxBdd.php';
     $title = $_POST['title'] ?? false;
     $title = htmlspecialchars($title);
     $category = $_POST['category'] ?? false;
     $category = htmlspecialchars($category);
     $picture = $_POST['picture'] ?? false;
     $picture = htmlspecialchars($picture);
-    $newPicture =  "pict".date("dmYHis")."."."jpg";
+    $newPicture = "pict" . date("dmYHis") . "." . "jpg";
     $desc = $_POST['desc'] ?? false;
     $desc = htmlspecialchars($desc);
     $login = $_SESSION['login']['login'] ?? false;
-
-    if (strlen($title) > 0 && strlen($category) > 0 && strlen($desc) > 0) {
-        try {
-            require_once 'cnxBdd.php';
-
-
-            $req = $pdo->prepare('insert into article values (null, :title, :category, :picture, :desc, :login, NOW())');
-            $req->execute([
-                ':title' => $title,
-                ':category' => $category,
-                ':picture' => $newPicture,
-                ':desc' => $desc,
-                ':login' => $login
-            ]);
-        } catch
-        (PDOException|DomainException $Exception) {
-            echo '
+    if (strlen($title) > 0 && strlen($category) > 0 && strlen($desc) > 0 && !empty($_FILES['picture'])) {
+        $maxSize = $_FILES['picture']['size'];
+        $maxSize = (int)$maxSize;
+        if ($maxSize > 2000000) {
+            header('Location:errorSize.html');
+        } else {
+            try {
+                $req = $pdo->prepare('insert into article values (null, :title, :category, :picture, :desc, :login, NOW())');
+                $req->execute([
+                    ':title' => $title,
+                    ':category' => $category,
+                    ':picture' => $newPicture,
+                    ':desc' => $desc,
+                    ':login' => $login
+                ]);
+            } catch
+            (PDOException|DomainException $Exception) {
+                echo '
             <div>
               <strong>Erreur!<br>' . $Exception->getMessage() . '</strong>
             </div>
             ';
             }
-        };
+        }
+    };
     ?>
     <form id='addNew' action='' method='POST' enctype='multipart/form-data'>
         <h4>Titre de votre article :</h4>
-        <input class='addTitle' type='text' name='title' />
+        <input class='addTitle' type='text' name='title'/>
         <h4>Pays :</h4>
-        <input class='addCat' type='text' name='category' />
+        <input class='addCat' type='text' name='category'/>
         <h4>Choisir une photo :</h4>
-        <input type="hidden" name="MAX_FILE_SIZE" value="200000" />
-        <input class='addPict' type='file' name='picture' accept='image/jpeg' />
-        <br />
+        <input class='addPict' type='file' name='picture' accept='image/jpeg'/>
+        <br/>
         <h4>Décrire votre voyage :</h4>
-        <textarea class='addDesc' cols='60' rows='10' name='desc'></textarea>
-        <br />
+        <textarea class='addDesc' name='desc'></textarea>
+        <br/>
         <button class='submitAddNewArticle' type='submit' name="submitArticle">Valider</button>
     </form>
 </div>
@@ -102,7 +104,7 @@ session_start();
                 $extensionFile = $elementsPath['extension'];
                 $extensionAutorised = array("jpg");
                 if (!(in_array($extensionFile, $extensionAutorised))) {
-                    echo "Le fichier n'a pas l'extension attendue";
+                    echo 'Le fichier n\'a pas l\'extension attendue';
                 } else {
                     $folderDestination = dirname(__FILE__) . "/images/{$article['id']}/";
                     $nameDestination = "pict" . date("dmYHis") . "." . $extensionFile;
@@ -117,8 +119,8 @@ session_start();
 
         foreach ($result as $key => $article) {
             $dateCreation = new DateTime($article['dateCreation']);
-        if ($article['login'] == $login) {
-            echo "
+            if ($article['login'] == $login) {
+                echo "
           <li>
           <img class='newAddPict' src='./images/{$article['id']}/{$article['picture']}'></img>
           <h6 class='newAddTitle'>{$article['title']}</h6>
@@ -141,8 +143,8 @@ session_start();
           </li>
             </form>
           ";
-        } else {
-            echo "
+            } else {
+                echo "
           <li>
           <img class='newAddPict' src='./images/{$article['id']}/{$article['picture']}'></img>
           <h6 class='newAddTitle'>{$article['title']}</h6>
@@ -154,7 +156,7 @@ session_start();
           <p>Posté le {$dateCreation->format('d/m/Y H:i:s')} par {$article['login']}</p>   
           </li>
           ";
-        }
+            }
         }
         ?>
     </ul>

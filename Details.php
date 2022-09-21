@@ -9,10 +9,10 @@ session_start();
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="stylesheet" href="./assets/css/style.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
           integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <title>Détails</title>
 </head>
 <body>
@@ -20,29 +20,17 @@ session_start();
 <?php
 require_once 'cnxBdd.php';
 
-try {
-    $id = $_POST['idArticle'] ?? false;
-    $id = (int)$id;
+$id = $_POST['idArticle'];
+$id = (int)$id;
 
-    if ($id <= 0) {
-        throw new Exception('Erreur lors de la récuperation de l\'article (id)');
-    }
-
+if ($id <= 0) {
     $req = $pdo->query('select * from article where id = :id');
     $req->execute([
         ':id' => $id
     ]);
-    $article = $req->fetch(PDO::FETCH_ASSOC) ?? null;
-
-} catch (Exception $exception) {
-    echo '
-            <div>
-              <strong>Une erreur est survenue : ' . $exception->getMessage() . '</strong>
-            </div>
-            ';
 }
 
-$stmt = $pdo->query("select * from article order by id desc");
+$stmt = $pdo->query("select * from article order by id");
 $result = $stmt->fetchAll();
 
 foreach ($result as $key => $article) {

@@ -18,12 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             $response = curl_exec($curl);
         } else {
-            // On utilisera file_get_contents
             $response = file_get_contents($url);
         }
 
-
-        // On vérifie qu'on a une réponse
         if (empty($response) || is_null($response)) {
             header('Location: user.php');
         } else {
@@ -33,12 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     isset($_POST['email']) && !empty($_POST['email']) &&
                     isset($_POST['password']) && !empty($_POST['password'])
                 ) {
-                    // On nettoie le contenu
                     $email = $_POST['email'] ?? null;
                     $password = $_POST['password'] ?? null;
                     $password = htmlspecialchars($password);
 
-                    // Ici vous traitez vos données
                     if (!is_null($password) && filter_var($email, FILTER_VALIDATE_EMAIL) !== false) {
                         require_once 'cnxBdd.php';
 

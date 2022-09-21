@@ -230,12 +230,12 @@ li {
 }
 
 .newAddPict {
-  width: 25vw;
-  height: 35vh;
+  width: 25em;
+  height: 40vh;
   margin-top: 2em;
   border-radius: 2em 7em 3em 5em;
   box-shadow: -8px 8px 0px #aaa;
-  background-size: cover;
+  background-size: contain;
 }
 
 #detailArticle {
@@ -358,17 +358,48 @@ label .password-icon .feather-eye-off {
 
 .detailDescription {
   margin: auto;
-  width: 85vw;
+  width: 25vw;
   font-size: 1.5em;
 }
 
-@media screen and (min-width: 1300px) {
+.addDesc {
+  width: 45vw;
+  height: 30vh;
+}
+
+@media screen and (max-width: 1300px) {
   #addNew {
     width: 45vw;
+  }
+  .fa-arrow-left-long,
+  .fa-house,
+  .fa-power-off,
+  .fa-facebook-f,
+  .fa-twitter,
+  .fa-envelope {
+    font-size: 1.85rem;
+    -webkit-text-stroke: 1px;
+    -webkit-text-stroke-color: black;
+    letter-spacing: 1.5em;
+  }
+  .newAddPict {
+    width: 40vw;
+    height: 40vh;
   }
 }
 
 @media screen and (max-width: 1000px) {
+  .fa-arrow-left-long,
+  .fa-house,
+  .fa-power-off,
+  .fa-facebook-f,
+  .fa-twitter,
+  .fa-envelope {
+    font-size: 1.7rem;
+    -webkit-text-stroke: 1px;
+    -webkit-text-stroke-color: black;
+    letter-spacing: 1.5em;
+  }
   #accueil,
   #new-user,
   #user {
@@ -377,9 +408,30 @@ label .password-icon .feather-eye-off {
   #addNew {
     width: 55vw;
   }
+  #blogTitle {
+    height: 50vh;
+  }
+  #blogTitle h3 {
+    font-size: 4.5em;
+  }
+  .newAddPict {
+    width: 75vw;
+    height: 60vh;
+  }
 }
 
 @media screen and (max-width: 800px) {
+  .fa-arrow-left-long,
+  .fa-house,
+  .fa-power-off,
+  .fa-facebook-f,
+  .fa-twitter,
+  .fa-envelope {
+    font-size: 1.5rem;
+    -webkit-text-stroke: 1px;
+    -webkit-text-stroke-color: black;
+    letter-spacing: 1.5em;
+  }
   #accueil,
   #new-user,
   #user {
@@ -388,9 +440,29 @@ label .password-icon .feather-eye-off {
   #addNew {
     width: 65vw;
   }
+  #blogTitle h3 {
+    font-size: 3.5em;
+  }
+  #blogTitle {
+    height: 40vh;
+  }
+  .newAddPict {
+    height: 45vh;
+  }
 }
 
 @media screen and (max-width: 600px) {
+  .fa-arrow-left-long,
+  .fa-house,
+  .fa-power-off,
+  .fa-facebook-f,
+  .fa-twitter,
+  .fa-envelope {
+    font-size: 1.2rem;
+    -webkit-text-stroke: 1px;
+    -webkit-text-stroke-color: black;
+    letter-spacing: 1.5em;
+  }
   .title-main {
     font-size: 1.8rem;
   }
@@ -399,5 +471,41 @@ label .password-icon .feather-eye-off {
   }
   #addNew {
     width: 75vw;
+  }
+  .newAddPict {
+    height: 35vh;
+  }
+  #blogTitle h3 {
+    font-size: 2.7em;
+  }
+  #blogTitle {
+    height: 35vh;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .fa-arrow-left-long,
+  .fa-house,
+  .fa-power-off,
+  .fa-facebook-f,
+  .fa-twitter,
+  .fa-envelope {
+    font-size: 1rem;
+    -webkit-text-stroke: 1px;
+    -webkit-text-stroke-color: black;
+    letter-spacing: 1.5em;
+  }
+  .newAddPict {
+    width: 70vw;
+    height: 25vh;
+  }
+  #blogTitle h3 {
+    font-size: 2.3em;
+  }
+  #blogTitle {
+    height: 25vh;
+  }
+  #new-articles h6 {
+    font-size: 1em;
   }
 }
